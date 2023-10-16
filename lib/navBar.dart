@@ -17,20 +17,29 @@ class _NavBarState extends State<NavBar> {
   _NavBarState(this._currentIndex);
   int _currentIndex;
   final List<Widget> _children = [
-    Bluetooth(title: 'Bluetooth'),
-    Metrics(title: 'Metrics'),
-    BatteryLife(title: 'Battery')
+    Bluetooth(),
+    Metrics(),
+    BatteryLife(batteryValue: 49,)
+  ];
+
+  final List<String> _titles = [
+    'Bluetooth',
+    'Metrics',
+    'Battery'
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_titles[_currentIndex]),
+      ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: _currentIndex,
         selectedItemColor: Colors.black,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.bluetooth_rounded),
             backgroundColor: Color(0xFFA8EFFF),
