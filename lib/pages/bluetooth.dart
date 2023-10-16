@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Bluetooth extends StatefulWidget {
-  const Bluetooth({super.key, required this.title});
-
-  final String title;
+  const Bluetooth({super.key});
 
   @override
   State<Bluetooth> createState() => _BluetoothState();
@@ -14,11 +12,8 @@ class _BluetoothState extends State<Bluetooth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: const Wrap(
+    return const Scaffold(
+      body: Wrap(
         runSpacing: 25.0,
         alignment: WrapAlignment.center,
         children: <Widget>[
