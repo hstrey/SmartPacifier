@@ -7,9 +7,9 @@ class BLEDevice {
   static final FlutterReactiveBle _bleInst = FlutterReactiveBle();
 
   static final Uuid _pressureServiceId =
-      Uuid.parse('6967741f-470f-4999-94f0-4b2f3e226789');
+      Uuid.parse('54f14985-0229-4e49-b054-18337e1f05d8');
   static final Uuid _pressureCharId =
-      Uuid.parse('10ef5208-6c49-458c-82e3-e3ef4d5ac0ec');
+      Uuid.parse('40650939-41cc-436c-959e-7f628d9720ee');
 
   static final StreamController<Set<BLEDevice>> _streamController =
       StreamController.broadcast();

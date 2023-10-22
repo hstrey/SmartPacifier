@@ -15,7 +15,7 @@ class BLE {
     return _bleInst
         .scanForDevices(
           withServices: [
-            Uuid.parse('6967741f-470f-4999-94f0-4b2f3e226789'),
+            Uuid.parse('54f14985-0229-4e49-b054-18337e1f05d8'),
           ],
         )
         .map((event) => BLEDevice(event))
