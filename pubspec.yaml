@@ -8,6 +8,7 @@ environment:
   sdk: '>=3.0.0-272.0.dev <4.0.0'
 
 dependencies:
+  syncfusion_flutter_charts: ^23.1.41
   flutter_reactive_ble: ^5.2.0
   flutter:
     sdk: flutter
