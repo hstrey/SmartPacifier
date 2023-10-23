@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+
 
 class Metrics extends StatelessWidget {
 
@@ -54,11 +57,19 @@ class Metrics extends StatelessWidget {
                                         .of(context)
                                         .size
                                         .width * 3 / 4 - 60,
-                                    child: const DecoratedBox(
+                                    child: DecoratedBox(
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                       ),
-                                      child: Text('Graph'),
+                                      child: SfCartesianChart(
+                                            primaryXAxis: CategoryAxis(),
+                                            title: ChartTitle(text: 'Pressure'),
+                                            //tooltipBehavior: _tooltipBehavior,
+                                            //series: <LineSeries<data, String>> [
+                                             // LineSeries(dataSource: data, xValueMapper: Class data, yValueMapper: Class data)
+
+
+                                      ),
                                     )
                                 ),
                                 const SizedBox(height: 60)
