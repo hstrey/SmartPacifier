@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_pacifier/pages/bluetooth.dart';
-import 'package:smart_pacifier/pages/batteryLife.dart';
+import 'package:smart_pacifier/pages/battery_life.dart';
 import 'package:smart_pacifier/pages/metrics.dart';
 
 class NavBar extends StatefulWidget {
@@ -8,18 +8,16 @@ class NavBar extends StatefulWidget {
   NavBar(initialIndex, {super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _NavBarState(initialIndex);
-  }
+  State<StatefulWidget> createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  _NavBarState(this._currentIndex);
-  int _currentIndex;
+  int _currentIndex = 1;
   final List<Widget> _children = [
     const Bluetooth(),
     const Metrics(),
     BatteryLife(batteryValue: 49,)
+
   ];
 
   final List<String> _titles = [

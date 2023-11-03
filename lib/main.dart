@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_pacifier/navBar.dart';
+import 'package:smart_pacifier/nav_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: NavBar(1),
-
+      home: const NavBar(),
     );
   }
 }
