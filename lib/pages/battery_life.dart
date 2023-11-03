@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class BatteryLife extends StatefulWidget {
-  BatteryLife({Key? key, required this.batteryValue}) : super(key: key);
+  const BatteryLife({Key? key, required this.batteryValue}) : super(key: key);
 
-  int batteryValue;
+  final int batteryValue;
 
   @override
-  _BatteryLifeState createState() => _BatteryLifeState();
+  State<StatefulWidget> createState() => _BatteryLifeState();
 }
 
 class _BatteryLifeState extends State<BatteryLife>{
@@ -45,11 +45,11 @@ class _BatteryLifeState extends State<BatteryLife>{
 }
 
 class BatteryIcon extends StatelessWidget {
-  int batteryLevel;
-  double height;
-  double width;
-  Color segmentColor;
-  BatteryIcon(
+  final int batteryLevel;
+  final double height;
+  final double width;
+  final Color segmentColor;
+  const BatteryIcon(
       {Key? key,
         required this.batteryLevel,
         required this.height,
