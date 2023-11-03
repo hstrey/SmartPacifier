@@ -58,7 +58,7 @@ class Metrics extends StatelessWidget {
                                         .size
                                         .width * 3 / 4 - 60,
                                     child: DecoratedBox(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Colors.white,
                                       ),
                                       child: SfCartesianChart(

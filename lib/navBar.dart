@@ -5,7 +5,7 @@ import 'package:smart_pacifier/pages/metrics.dart';
 
 class NavBar extends StatefulWidget {
   int initialIndex = 1;
-  NavBar(initialIndex);
+  NavBar(initialIndex, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -17,8 +17,8 @@ class _NavBarState extends State<NavBar> {
   _NavBarState(this._currentIndex);
   int _currentIndex;
   final List<Widget> _children = [
-    Bluetooth(),
-    Metrics(),
+    const Bluetooth(),
+    const Metrics(),
     BatteryLife(batteryValue: 49,)
   ];
 

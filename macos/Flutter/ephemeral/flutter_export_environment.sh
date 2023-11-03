@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\Peter D\src\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\PeterD\StudioProjects\smart_pacifier"
+export "FLUTTER_ROOT=C:\Users\dipie\Documents\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\dipie\Documents\GitHub\SmartPacifier"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
