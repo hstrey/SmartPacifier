@@ -12,12 +12,12 @@ class _BluetoothState extends State<Bluetooth> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Wrap(
         runSpacing: 25.0,
         alignment: WrapAlignment.center,
         children: <Widget>[
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
             child: Text(
               "These are the instructions on how to connect to your Bluetooth Smart Pacifier.",
@@ -27,11 +27,64 @@ class _BluetoothState extends State<Bluetooth> {
               ),
             ),
           ),
-          ConnectionButton(),
-          ConnectionButton(),
-          ConnectionButton(),
-          ConnectionButton(),
-          ConnectionButton(),
+          OutlinedButton.icon(
+            label: const Text("New Device"),
+            icon: const Icon(
+              Icons.add,
+              color: Colors.deepPurple,
+            ),
+            style: OutlinedButton.styleFrom(
+                fixedSize: const Size(350, 50),
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                side: const BorderSide(width: 3, color: Colors.deepPurple),
+                backgroundColor: Colors.white,
+                shape: const StadiumBorder()),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Welcome!',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 50,
+                          ),
+                        ),
+                        Image.asset('assets/images/pacifier1.png'),
+                        const Text(
+                          'What is your new device name?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const TextField(
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter a new device name...',
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          const ConnectionButton(),
+          const ConnectionButton(),
+          const ConnectionButton(),
+          const ConnectionButton(),
+          const ConnectionButton(),
         ],
       ),
     );
