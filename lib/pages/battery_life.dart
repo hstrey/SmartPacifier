@@ -1,45 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:smart_pacifier/services/device.dart';
 import 'dart:math' as math;
 
 class BatteryLife extends StatefulWidget {
-  const BatteryLife({Key? key, required this.batteryValue}) : super(key: key);
-
-  final int batteryValue;
+  const BatteryLife({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _BatteryLifeState();
 }
 
 class _BatteryLifeState extends State<BatteryLife>{
-  List<Color> batteryColors = [Colors.red, Colors.yellow, Colors.green, Colors.green];
+  List<Color> batteryColors = [Colors.black, Colors.red, Colors.yellow, Colors.green, Colors.green];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(top: 75),
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${widget.batteryValue}%',
-                      style: const TextStyle(fontSize: 100),
-                    ),
-                    Transform.rotate(
-                        angle: 90 * math.pi / 180,
-                        child: BatteryIcon(
-                            batteryLevel: widget.batteryValue,
-                            height: MediaQuery.of(context).size.height / 5,
-                            width: MediaQuery.of(context).size.width / 2,
-                            segmentColor: batteryColors[(widget.batteryValue/25 + 0.99).truncate() - 1]
-                        )),
+    return FutureBuilder<int>(
+      future: BLEDevice.getBattery(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final int batteryValue = snapshot.data!;
+          return Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.only(top: 75),
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '$batteryValue%',
+                            style: const TextStyle(fontSize: 100),
+                          ),
+                          Transform.rotate(
+                              angle: 90 * math.pi / 180,
+                              child: BatteryIcon(
+                                  batteryLevel: batteryValue,
+                                  height: MediaQuery.of(context).size.height / 5,
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  segmentColor: batteryColors[(batteryValue/25 + 0.99).truncate()]
+                              )),
 
-                  ]
+                        ]
+                    )
+                ),
               )
-          ),
-        )
+          );
+        }
+        else{
+          return const CircularProgressIndicator();
+        }
+      }
     );
   }
 }
