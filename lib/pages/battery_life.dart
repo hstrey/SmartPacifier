@@ -3,18 +3,29 @@ import 'package:smart_pacifier/services/device.dart';
 import 'dart:math' as math;
 
 class BatteryLife extends StatefulWidget {
-  const BatteryLife({Key? key}) : super(key: key);
+  final BLEDevice device;
+
+  const BatteryLife({required this.device, Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _BatteryLifeState();
 }
 
 class _BatteryLifeState extends State<BatteryLife>{
-  List<Color> batteryColors = [Colors.black, Colors.red, Colors.yellow, Colors.green, Colors.green];
+  final List<Color> batteryColors = [Colors.black, Colors.red, Colors.yellow, Colors.green, Colors.green];
+
+  late Future<int> batteryPercentFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    batteryPercentFuture = widget.device.getBatteryPercentage();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<int>(
-      future: BLEDevice.getBattery(),
+      future: batteryPercentFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final int batteryValue = snapshot.data!;
@@ -32,16 +43,16 @@ class _BatteryLifeState extends State<BatteryLife>{
                             style: const TextStyle(fontSize: 100),
                           ),
                           Transform.rotate(
-                              angle: 90 * math.pi / 180,
-                              child: BatteryIcon(
-                                  batteryLevel: batteryValue,
-                                  height: MediaQuery.of(context).size.height / 5,
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  segmentColor: batteryColors[(batteryValue/25 + 0.99).truncate()]
-                              )),
-
+                            angle: 90 * math.pi / 180,
+                            child: BatteryIcon(
+                                batteryLevel: batteryValue,
+                                height: MediaQuery.of(context).size.height / 5,
+                                width: MediaQuery.of(context).size.width / 2,
+                                segmentColor: batteryColors[(batteryValue/25 + 0.99).truncate()]
+                            ),
+                          ),
                         ]
-                    )
+                    ),
                 ),
               )
           );
@@ -49,7 +60,7 @@ class _BatteryLifeState extends State<BatteryLife>{
         else{
           return const CircularProgressIndicator();
         }
-      }
+      },
     );
   }
 }

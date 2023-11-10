@@ -16,14 +16,15 @@ class _NavBarState extends State<NavBar> {
   final List<Widget> _children = [
     const Bluetooth(),
     const Metrics(),
-    const BatteryLife()
-
+    const BatteryLife(
+      device: ,
+    ),
   ];
 
   final List<String> _titles = [
     'Bluetooth',
     'Metrics',
-    'Battery'
+    'Battery',
   ];
 
   @override
