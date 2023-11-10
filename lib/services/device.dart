@@ -37,7 +37,8 @@ class BLEDevice {
   }
 
   final DiscoveredDevice _device;
-  final QualifiedCharacteristic _pressureCharacteristic, _batteryPercentCharacteristic;
+  final QualifiedCharacteristic _pressureCharacteristic,
+      _batteryPercentCharacteristic;
 
   bool isConnected = false;
   StreamSubscription<ConnectionStateUpdate>? _connectionStateStreamSub;
@@ -102,7 +103,8 @@ class BLEDevice {
   }
 
   Future<int> getBatteryPercentage() async {
-    final List<int> data = await _bleInst.readCharacteristic(_batteryPercentCharacteristic);
+    final List<int> data =
+        await _bleInst.readCharacteristic(_batteryPercentCharacteristic);
 
     assert(data.length == 1);
 

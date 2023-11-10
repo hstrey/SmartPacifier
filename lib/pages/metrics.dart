@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
-
 class Metrics extends StatelessWidget {
-
   const Metrics({Key? key}) : super(key: key);
 
   @override
@@ -16,9 +13,7 @@ class Metrics extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: SizedBox(
-                    width: MediaQuery
-                        .sizeOf(context)
-                        .width,
+                    width: MediaQuery.sizeOf(context).width,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -28,10 +23,8 @@ class Metrics extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         SizedBox.square(
-                          dimension: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 3 / 4 - 60,
+                          dimension:
+                              MediaQuery.of(context).size.width * 3 / 4 - 60,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: const Color(0xffD9D9D9),
@@ -44,34 +37,32 @@ class Metrics extends StatelessWidget {
                                   height: 45,
                                   child: Text(
                                     'Waveform',
-                                    style: TextStyle(fontSize: 24,
+                                    style: TextStyle(
+                                        fontSize: 24,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 SizedBox(
-                                    height: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 3 / 4 - 180,
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 3 / 4 - 60,
+                                    height: MediaQuery.of(context).size.width *
+                                            3 /
+                                            4 -
+                                        180,
+                                    width: MediaQuery.of(context).size.width *
+                                            3 /
+                                            4 -
+                                        60,
                                     child: DecoratedBox(
                                       decoration: const BoxDecoration(
                                         color: Colors.white,
                                       ),
                                       child: SfCartesianChart(
-                                            primaryXAxis: CategoryAxis(),
-                                            title: ChartTitle(text: 'Pressure'),
-                                            //tooltipBehavior: _tooltipBehavior,
-                                            //series: <LineSeries<data, String>> [
-                                             // LineSeries(dataSource: data, xValueMapper: Class data, yValueMapper: Class data)
-
-
+                                        primaryXAxis: CategoryAxis(),
+                                        title: ChartTitle(text: 'Pressure'),
+                                        //tooltipBehavior: _tooltipBehavior,
+                                        //series: <LineSeries<data, String>> [
+                                        // LineSeries(dataSource: data, xValueMapper: Class data, yValueMapper: Class data)
                                       ),
-                                    )
-                                ),
+                                    )),
                                 const SizedBox(height: 60)
                               ],
                             ),
@@ -79,22 +70,16 @@ class Metrics extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 3 / 4 - 60,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 1 / 4,
+                          width: MediaQuery.of(context).size.width * 3 / 4 - 60,
+                          height: MediaQuery.of(context).size.width * 1 / 4,
                           child: DecoratedBox(
                               decoration: BoxDecoration(
                                 color: Colors.deepPurple,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       'Peak Pressure',
@@ -103,32 +88,25 @@ class Metrics extends StatelessWidget {
                                     ),
                                     Text(
                                       '40 mmHg',
-                                      style: TextStyle(color: Colors.white,
+                                      style: TextStyle(
+                                          color: Colors.white,
                                           fontSize: 28,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                  ]
-                              )
-                          ),
+                                  ])),
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 3 / 4 - 60,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 1 / 4,
+                          width: MediaQuery.of(context).size.width * 3 / 4 - 60,
+                          height: MediaQuery.of(context).size.width * 1 / 4,
                           child: DecoratedBox(
                               decoration: BoxDecoration(
                                 color: Colors.deepPurple,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       'Duration',
@@ -137,20 +115,16 @@ class Metrics extends StatelessWidget {
                                     ),
                                     Text(
                                       '1 Hour',
-                                      style: TextStyle(color: Colors.white,
+                                      style: TextStyle(
+                                          color: Colors.white,
                                           fontSize: 28,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                  ]
-                              )
-                          ),
+                                  ])),
                         ),
                       ],
-                    )
-                ),
+                    )),
               ),
-            )
-        )
-    );
+            )));
   }
 }
