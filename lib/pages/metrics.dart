@@ -23,7 +23,7 @@ class Metrics extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         const Text(
-                          'Pacifier information from the last 24 hours',
+                          'Pacifier information from the last 15 minutes',
                           style: TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 20),
@@ -31,7 +31,7 @@ class Metrics extends StatelessWidget {
                           dimension: MediaQuery
                               .of(context)
                               .size
-                              .width * 3 / 4 - 60,
+                              .width - 60,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: const Color(0xffD9D9D9),
@@ -52,11 +52,11 @@ class Metrics extends StatelessWidget {
                                     height: MediaQuery
                                         .of(context)
                                         .size
-                                        .width * 3 / 4 - 180,
+                                        .width - 180,
                                     width: MediaQuery
                                         .of(context)
                                         .size
-                                        .width * 3 / 4 - 60,
+                                        .width - 60,
                                     child: DecoratedBox(
                                       decoration: const BoxDecoration(
                                         color: Colors.white,
@@ -131,12 +131,12 @@ class Metrics extends StatelessWidget {
                                       .spaceAround,
                                   children: [
                                     Text(
-                                      'Duration',
+                                      'Suck Frequency',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 28),
                                     ),
                                     Text(
-                                      '1 Hour',
+                                      '1 Suck/Second',
                                       style: TextStyle(color: Colors.white,
                                           fontSize: 28,
                                           fontWeight: FontWeight.bold),

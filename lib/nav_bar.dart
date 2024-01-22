@@ -14,9 +14,9 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _currentIndex = 1;
   final List<Widget> _children = [
-    const Bluetooth(),
+    Bluetooth(),
     const Metrics(),
-    BatteryLife(batteryValue: 49,)
+    const BatteryLife()
 
   ];
 
