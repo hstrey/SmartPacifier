@@ -94,6 +94,10 @@ class BLEDevice {
         .map(_bytesToFloat);
   }
 
+  static Future<int> getBattery() async {
+    return Future.value(75);
+  }
+
   @override
   bool operator ==(dynamic other) {
     if (other is! BLEDevice) {
