@@ -140,7 +140,7 @@ class BLEDevice {
   /// Returns true if there is an error with charging
   Future<bool> getChargerErrors() async {
     final List<int> data =
-        await _bleInst.readCharacteristic(_isChargingCharacteristic);
+        await _bleInst.readCharacteristic(_isChargerErrorCharacteristic);
 
     assert(data.length == 1);
 
