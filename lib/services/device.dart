@@ -17,6 +17,8 @@ class BLEDevice {
       StreamController.broadcast();
 
   static final Set<BLEDevice> currentDevices = {};
+  static BLEDevice? displayedDevice;
+  
   static void _addConnectedDevice(BLEDevice device) {
     currentDevices.add(device);
     _streamController.add(currentDevices.toSet());

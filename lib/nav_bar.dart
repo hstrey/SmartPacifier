@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smart_pacifier/pages/bluetooth.dart';
 import 'package:smart_pacifier/pages/battery_life.dart';
 import 'package:smart_pacifier/pages/metrics.dart';
+import 'package:smart_pacifier/services/device.dart';
+
 
 class NavBar extends StatefulWidget {
   int initialIndex = 1;
@@ -13,12 +15,13 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int _currentIndex = 1;
+  
+  
+
   final List<Widget> _children = [
     const Bluetooth(),
     const Metrics(),
-    const BatteryLife(
-      device: ,
-    ),
+    BatteryLife(device: BLEDevice.displayedDevice),
   ];
 
   final List<String> _titles = [
