@@ -6,15 +6,23 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 class BLEDevice {
   static final FlutterReactiveBle _bleInst = FlutterReactiveBle();
 
-  static final Uuid _pressureServiceId =
+  static final Uuid _devParamServiceId =
       Uuid.parse('54f14985-0229-4e49-b054-18337e1f05d8');
   static final Uuid _pressureCharId =
       Uuid.parse('40650939-41cc-436c-959e-7f628d9720ee');
+  static final Uuid _batteryPercentCharId =
+      Uuid.parse('790cbc53-3aa9-471b-bbf2-e67cefaf5c6a');
+  static final Uuid _batteryChargingCharId =
+      Uuid.parse('a454b40e-00a2-45c1-a7fd-fd1f1ffd7dca');
+  static final Uuid _batteryChargerErrorCharId =
+      Uuid.parse('f31736e6-cb55-4aad-a89e-a1cd1b09ab33');
 
   static final StreamController<Set<BLEDevice>> _streamController =
       StreamController.broadcast();
 
   static final Set<BLEDevice> currentDevices = {};
+  static BLEDevice? displayedDevice;
+  
   static void _addConnectedDevice(BLEDevice device) {
     currentDevices.add(device);
     _streamController.add(currentDevices.toSet());
@@ -35,7 +43,10 @@ class BLEDevice {
   }
 
   final DiscoveredDevice _device;
-  final QualifiedCharacteristic _pressureCharacteristic;
+  final QualifiedCharacteristic _pressureCharacteristic,
+      _batteryPercentCharacteristic,
+      _isChargingCharacteristic,
+      _isChargerErrorCharacteristic;
 
   bool isConnected = false;
   StreamSubscription<ConnectionStateUpdate>? _connectionStateStreamSub;
@@ -43,8 +54,23 @@ class BLEDevice {
   BLEDevice(this._device)
       : _pressureCharacteristic = QualifiedCharacteristic(
           deviceId: _device.id,
-          serviceId: _pressureServiceId,
+          serviceId: _devParamServiceId,
           characteristicId: _pressureCharId,
+        ),
+        _batteryPercentCharacteristic = QualifiedCharacteristic(
+          deviceId: _device.id,
+          serviceId: _devParamServiceId,
+          characteristicId: _batteryPercentCharId,
+        ),
+        _isChargingCharacteristic = QualifiedCharacteristic(
+          deviceId: _device.id,
+          serviceId: _devParamServiceId,
+          characteristicId: _batteryChargingCharId,
+        ),
+        _isChargerErrorCharacteristic = QualifiedCharacteristic(
+          deviceId: _device.id,
+          serviceId: _devParamServiceId,
+          characteristicId: _batteryChargerErrorCharId,
         );
 
   String get id => _device.id;
@@ -94,8 +120,33 @@ class BLEDevice {
         .map(_bytesToFloat);
   }
 
-  static Future<int> getBattery() async {
-    return Future.value(75);
+  Future<int> getBatteryPercentage() async {
+    final List<int> data =
+        await _bleInst.readCharacteristic(_batteryPercentCharacteristic);
+
+    assert(data.length == 1);
+
+    return data.first;
+  }
+
+  /// Returns true if the battery is charging
+  Future<bool> getChargingStatus() async {
+    final List<int> data =
+        await _bleInst.readCharacteristic(_isChargingCharacteristic);
+
+    assert(data.length == 1);
+
+    return data.first.toBool();
+  }
+
+  /// Returns true if there is an error with charging
+  Future<bool> getChargerErrors() async {
+    final List<int> data =
+        await _bleInst.readCharacteristic(_isChargerErrorCharacteristic);
+
+    assert(data.length == 1);
+
+    return data.first.toBool();
   }
 
   @override

@@ -12,6 +12,15 @@ class Bluetooth extends StatefulWidget {
 }
 
 class _BluetoothState extends State<Bluetooth> {
+  List<ConnectionButton> scannedDevices = [];
+  
+  @override
+  void initState() {
+    super.initState();
+    for(BLEDevice device in BLEDevice.currentDevices){
+      scannedDevices.add(ConnectionButton(device: device));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +38,24 @@ class _BluetoothState extends State<Bluetooth> {
               ),
             ),
           ),
-          NewDeviceButton(),
-          RemoveDeviceButton(),
-          for(String name in widget.buttonNames) ConnectionButton(buttonName: name,)
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                fixedSize: const Size(350, 50),
+                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurple,
+                shape: const StadiumBorder()),
+            child: const Text("Scan for Devices"),
+            onPressed: () {
+              setState(() {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => _buildPopup(context)
+                );
+            },);
+            },
+          ),
+          for(ConnectionButton button in scannedDevices) button,
         ],
       ),
     );
@@ -245,17 +269,17 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
 }
 
 class ConnectionButton extends StatefulWidget {
-  final String buttonName;
+  final BLEDevice device;
   
-  const ConnectionButton({Key? key, required this.buttonName}) : super(key: key);
+  const ConnectionButton({required this.device, Key? key}) : super(key: key);
 
   @override
   State<ConnectionButton> createState() => _ConnectionButtonState();
 }
 
 class _ConnectionButtonState extends State<ConnectionButton> {
-  bool buttonA = false;
-  bool buttonB = false;
+  String buttonName = 'Connect Device';
+  bool connected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -266,13 +290,46 @@ class _ConnectionButtonState extends State<ConnectionButton> {
           foregroundColor: Colors.white,
           backgroundColor: Colors.deepPurple,
           shape: const StadiumBorder()),
-      child: buttonB ? Text("${widget.buttonName} (Connected)") : Text("${widget.buttonName} (Not Connected)"),
+      child: connected ? const Text("Connected") : const Text("Connect Device"),
       onPressed: () {
         setState(() {
-          buttonA = !buttonA;
-          buttonB = !buttonB;
+          connected = !connected;
+          connected ? BLEDevice.displayedDevice = widget.device : BLEDevice.displayedDevice = null;
         });
       },
     );
   }
+}
+
+Dialog _buildPopup(BuildContext context) {
+  return Dialog(
+    elevation: 16,
+    child: ListView(padding: const EdgeInsets.all(15), shrinkWrap: true, children: [
+      const SizedBox(
+        height: 50,
+        child: Text('Available Devices'),
+      ),
+      _popupItem(context),
+      const SizedBox(height: 20)
+    ]),
+  );
+}
+
+Widget _popupItem(BuildContext context) {
+  List<SizedBox> popupDisplay = [];
+  List<BLEDevice> devices = [];
+
+  for (int i = 0; i < devices.length; i++) {
+    popupDisplay.add(SizedBox(
+      height: 50,
+      child: TextButton(
+        child: Text(devices[i].name),
+        onPressed: () async {
+          Navigator.of(context).pop();
+          devices[i].connect();
+        },
+      ),
+    ));
+  }
+  return Column(children: popupDisplay);
 }
