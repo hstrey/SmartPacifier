@@ -39,7 +39,7 @@ class BLEDevice {
       Uuid.parse('f31736e6-cb55-4aad-a89e-a1cd1b09ab33');
 
   static final StreamController<Set<BLEDevice>> _streamController =
-      StreamController.broadcast();
+      StreamController<Set<BLEDevice>>.broadcast();
 
   static final Set<BLEDevice> currentDevices = <BLEDevice>{};
   static BLEDevice? displayedDevice;
@@ -61,7 +61,7 @@ class BLEDevice {
   static Future<void> disconnectAll() async {
     await Future.wait(
       <Future<void>>[
-        for (BLEDevice device in currentDevices) device.disconnect()
+        for (BLEDevice device in currentDevices) device.disconnect(),
       ],
     );
   }
@@ -88,7 +88,7 @@ class BLEDevice {
       prescanDuration: const Duration(seconds: 20),
     );
 
-    final Completer<void> isConnectedComplete = Completer();
+    final Completer<void> isConnectedComplete = Completer<void>();
     _connectionStateStreamSub =
         connectionStream.listen((ConnectionStateUpdate event) {
       if (event.connectionState == DeviceConnectionState.connected) {
@@ -111,17 +111,27 @@ class BLEDevice {
     _removeConnectedDevice(this);
   }
 
-  double _bytesToFloat(List<int> byteData) {
-    assert(byteData.length == 4);
+  // double _bytesToFloat(List<int> byteData) {
+  //   assert(byteData.length == 4);
+
+  //   final Uint8List data = Uint8List.fromList(byteData);
+  //   return data.buffer.asFloat32List(0, 1).first;
+  // }
+
+  List<double> _bytesToFloatList(List<int> byteData) {
+    assert(byteData.length % 4 == 0);
 
     final Uint8List data = Uint8List.fromList(byteData);
-    return data.buffer.asFloat32List(0, 1).first;
+    return data.buffer.asFloat32List().toList(growable: false);
   }
 
+  /// Returns a stream of pressure values one at a time
   Stream<double> pressureStream() {
     return _bleInst
         .subscribeToCharacteristic(_pressureCharacteristic)
-        .map(_bytesToFloat);
+        .expand<double>((List<int> bytes) {
+          return _bytesToFloatList(bytes);
+        });
   }
 
   Future<int> getBatteryPercentage() async {
