@@ -19,7 +19,7 @@ class _NavBarState extends State<NavBar> {
   
 
   final List<Widget> _children = [
-    const Bluetooth(),
+    Bluetooth(),
     const Metrics(),
     BatteryLife(device: BLEDevice.displayedDevice),
   ];

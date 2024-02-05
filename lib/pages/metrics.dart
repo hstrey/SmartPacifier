@@ -19,7 +19,7 @@ class Metrics extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         const Text(
-                          'Pacifier information from the last 24 hours',
+                          'Pacifier information from the last 15 minutes',
                           style: TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 20),
@@ -110,7 +110,7 @@ class Metrics extends StatelessWidget {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
-                                      'Duration',
+                                      'Suck Frequency',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 28),
                                     ),
