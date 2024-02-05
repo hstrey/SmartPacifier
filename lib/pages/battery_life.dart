@@ -25,7 +25,8 @@ class _BatteryLifeState extends State<BatteryLife> {
   @override
   void initState() {
     super.initState();
-    batteryPercentFuture = widget.device?.getBatteryPercentage() ?? Future<int>.value(-1);
+    batteryPercentFuture =
+        widget.device?.getBatteryPercentage() ?? Future<int>.value(-1);
   }
 
   @override
@@ -35,15 +36,14 @@ class _BatteryLifeState extends State<BatteryLife> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final int batteryValue = snapshot.data!;
-          if(batteryValue == -1){
+          if (batteryValue == -1) {
             return const Scaffold(
-              body: Center(
-                child: Text('No device connected.', textScaleFactor: 2, textAlign: TextAlign.center)
-              )
-            );
-          } else{
+                body: Center(
+                    child: Text('No device connected.',
+                        textScaleFactor: 2, textAlign: TextAlign.center)));
+          } else {
             return Scaffold(
-              body: Padding(
+                body: Padding(
               padding: const EdgeInsets.only(top: 75),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -59,8 +59,8 @@ class _BatteryLifeState extends State<BatteryLife> {
                         batteryLevel: batteryValue,
                         height: MediaQuery.of(context).size.height / 5,
                         width: MediaQuery.of(context).size.width / 2,
-                        segmentColor:
-                            batteryColors[(batteryValue / 25 + 0.99).truncate()]),
+                        segmentColor: batteryColors[
+                            (batteryValue / 25 + 0.99).truncate()]),
                   ),
                 ]),
               ),

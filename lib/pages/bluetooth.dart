@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smart_pacifier/services/device.dart';
 import 'package:smart_pacifier/services/ble_helper.dart';
 
-class Bluetooth extends StatefulWidget {  
-  List<String> buttonNames = [];
-
-  Bluetooth({super.key});
+class Bluetooth extends StatefulWidget {
+  const Bluetooth({super.key});
 
   @override
   State<Bluetooth> createState() => _BluetoothState();
@@ -13,14 +11,15 @@ class Bluetooth extends StatefulWidget {
 
 class _BluetoothState extends State<Bluetooth> {
   List<ConnectionButton> scannedDevices = [];
-  
+
   @override
   void initState() {
     super.initState();
-    for(BLEDevice device in BLEDevice.currentDevices){
+    for (BLEDevice device in BLEDevice.currentDevices) {
       scannedDevices.add(ConnectionButton(device: device));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,37 +40,37 @@ class _BluetoothState extends State<Bluetooth> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 fixedSize: const Size(350, 50),
-                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.deepPurple,
                 shape: const StadiumBorder()),
             child: const Text("Scan for Devices"),
             onPressed: () {
-              setState(() {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => _buildPopup(context)
-                );
-            },);
+              setState(
+                () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => _buildPopup(context));
+                },
+              );
             },
           ),
-          for(ConnectionButton button in scannedDevices) button,
+          for (ConnectionButton button in scannedDevices) button,
         ],
       ),
     );
   }
 }
 
-class NewDeviceButton extends Bluetooth{
-
-  NewDeviceButton({Key? key} ) : super(key: key);
+class NewDeviceButton extends StatefulWidget {
+  const NewDeviceButton({Key? key}) : super(key: key);
 
   @override
   State<NewDeviceButton> createState() => _NewDeviceButtonState();
 }
 
-class _NewDeviceButtonState extends State<NewDeviceButton>{
-  
+class _NewDeviceButtonState extends State<NewDeviceButton> {
   final TextEditingController nameController = TextEditingController();
 
   @override
@@ -82,7 +81,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return OutlinedButton.icon(
       label: const Text("New Device"),
       icon: const Icon(
@@ -91,8 +90,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton>{
       ),
       style: OutlinedButton.styleFrom(
           fixedSize: const Size(350, 50),
-          textStyle:
-              const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           side: const BorderSide(width: 3, color: Colors.deepPurple),
           backgroundColor: Colors.white,
           shape: const StadiumBorder()),
@@ -114,9 +112,8 @@ class _NewDeviceButtonState extends State<NewDeviceButton>{
                     ),
                   ),
                   SizedBox(
-                    height: 150,
-                    child:Image.asset('assets/images/pacifier1.png')
-                  ),
+                      height: 150,
+                      child: Image.asset('assets/images/pacifier1.png')),
                   const Text(
                     'What is your new device name?',
                     style: TextStyle(
@@ -142,7 +139,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton>{
                           Navigator.pop(context);
                         },
                       ),
-                      const SizedBox(width:30),
+                      const SizedBox(width: 30),
                       ElevatedButton(
                         child: const Text('Add Device'),
                         onPressed: () {
@@ -165,16 +162,14 @@ class _NewDeviceButtonState extends State<NewDeviceButton>{
   }
 }
 
-class RemoveDeviceButton extends Bluetooth{
-
-  RemoveDeviceButton({Key? key} ) : super(key: key);
+class RemoveDeviceButton extends Bluetooth {
+  const RemoveDeviceButton({Key? key}) : super(key: key);
 
   @override
   State<RemoveDeviceButton> createState() => _RemoveDeviceButtonState();
 }
 
-class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
-  
+class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
   final TextEditingController nameController = TextEditingController();
 
   @override
@@ -185,7 +180,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return OutlinedButton.icon(
       label: const Text("Remove Device"),
       icon: const Icon(
@@ -194,8 +189,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
       ),
       style: OutlinedButton.styleFrom(
           fixedSize: const Size(350, 50),
-          textStyle:
-              const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           side: const BorderSide(width: 3, color: Colors.deepPurple),
           backgroundColor: Colors.white,
           shape: const StadiumBorder()),
@@ -217,9 +211,8 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
                     ),
                   ),
                   SizedBox(
-                    height: 150,
-                    child:Image.asset('assets/images/pacifier1.png')
-                  ),
+                      height: 150,
+                      child: Image.asset('assets/images/pacifier1.png')),
                   const Text(
                     'What is your new device name?',
                     style: TextStyle(
@@ -245,7 +238,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
                           Navigator.pop(context);
                         },
                       ),
-                      const SizedBox(width:30),
+                      const SizedBox(width: 30),
                       ElevatedButton(
                         child: const Text('Add Device'),
                         onPressed: () {
@@ -270,7 +263,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton>{
 
 class ConnectionButton extends StatefulWidget {
   final BLEDevice device;
-  
+
   const ConnectionButton({required this.device, Key? key}) : super(key: key);
 
   @override
@@ -294,7 +287,9 @@ class _ConnectionButtonState extends State<ConnectionButton> {
       onPressed: () {
         setState(() {
           connected = !connected;
-          connected ? BLEDevice.displayedDevice = widget.device : BLEDevice.displayedDevice = null;
+          connected
+              ? BLEDevice.displayedDevice = widget.device
+              : BLEDevice.displayedDevice = null;
         });
       },
     );
@@ -304,14 +299,17 @@ class _ConnectionButtonState extends State<ConnectionButton> {
 Dialog _buildPopup(BuildContext context) {
   return Dialog(
     elevation: 16,
-    child: ListView(padding: const EdgeInsets.all(15), shrinkWrap: true, children: [
-      const SizedBox(
-        height: 50,
-        child: Text('Available Devices'),
-      ),
-      _popupItem(context),
-      const SizedBox(height: 20)
-    ]),
+    child: ListView(
+        padding: const EdgeInsets.all(15),
+        shrinkWrap: true,
+        children: [
+          const SizedBox(
+            height: 50,
+            child: Text('Available Devices'),
+          ),
+          _popupItem(context),
+          const SizedBox(height: 20)
+        ]),
   );
 }
 

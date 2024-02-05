@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Metrics extends StatelessWidget {
-    
   const Metrics({Key? key}) : super(key: key);
 
   @override

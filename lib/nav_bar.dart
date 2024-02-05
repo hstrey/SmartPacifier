@@ -4,10 +4,8 @@ import 'package:smart_pacifier/pages/battery_life.dart';
 import 'package:smart_pacifier/pages/metrics.dart';
 import 'package:smart_pacifier/services/device.dart';
 
-
 class NavBar extends StatefulWidget {
-  int initialIndex = 1;
-  NavBar(initialIndex, {super.key});
+  const NavBar({super.key});
 
   @override
   State<StatefulWidget> createState() => _NavBarState();
@@ -15,11 +13,9 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int _currentIndex = 1;
-  
-  
 
   final List<Widget> _children = [
-    Bluetooth(),
+    const Bluetooth(),
     const Metrics(),
     BatteryLife(device: BLEDevice.displayedDevice),
   ];
