@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:smart_pacifier/services/ble_helper.dart';
 import 'package:smart_pacifier/services/device.dart';
 
 class Bluetooth extends StatefulWidget {
@@ -9,14 +12,25 @@ class Bluetooth extends StatefulWidget {
 }
 
 class _BluetoothState extends State<Bluetooth> {
-  List<ConnectionButton> scannedDevices = <ConnectionButton>[];
+  final List<BLEDevice> scannedDevices = <BLEDevice>[];
+  late final StreamSubscription<BLEDevice> scanSubscription;
 
   @override
   void initState() {
     super.initState();
-    for (BLEDevice device in BLEDevice.currentDevices) {
-      scannedDevices.add(ConnectionButton(device: device));
-    }
+
+    scanSubscription = BLE.scan().listen((BLEDevice device) {
+      setState(() {
+        scannedDevices.add(device);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    scanSubscription.cancel();
   }
 
   @override
@@ -57,7 +71,7 @@ class _BluetoothState extends State<Bluetooth> {
               );
             },
           ),
-          for (ConnectionButton button in scannedDevices) button,
+          for (BLEDevice device in scannedDevices) ConnectionButton(device: device),
         ],
       ),
     );
@@ -146,7 +160,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton> {
                       ElevatedButton(
                         child: const Text('Add Device'),
                         onPressed: () {
-                          widget.buttonNames.add(nameController.text);
+                          //widget.buttonNames.add(nameController.text);
                           nameController.text = '';
                           Navigator.pop(context);
                           setState(() {});
@@ -247,7 +261,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
                       ElevatedButton(
                         child: const Text('Add Device'),
                         onPressed: () {
-                          widget.buttonNames.add(nameController.text);
+                          //widget.buttonNames.add(nameController.text);
                           nameController.text = '';
                           Navigator.pop(context);
                           setState(() {});
