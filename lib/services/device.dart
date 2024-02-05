@@ -4,53 +4,6 @@ import 'dart:typed_data';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class BLEDevice {
-  static final FlutterReactiveBle _bleInst = FlutterReactiveBle();
-
-  static final Uuid _devParamServiceId =
-      Uuid.parse('54f14985-0229-4e49-b054-18337e1f05d8');
-  static final Uuid _pressureCharId =
-      Uuid.parse('40650939-41cc-436c-959e-7f628d9720ee');
-  static final Uuid _batteryPercentCharId =
-      Uuid.parse('790cbc53-3aa9-471b-bbf2-e67cefaf5c6a');
-  static final Uuid _batteryChargingCharId =
-      Uuid.parse('a454b40e-00a2-45c1-a7fd-fd1f1ffd7dca');
-  static final Uuid _batteryChargerErrorCharId =
-      Uuid.parse('f31736e6-cb55-4aad-a89e-a1cd1b09ab33');
-
-  static final StreamController<Set<BLEDevice>> _streamController =
-      StreamController.broadcast();
-
-  static final Set<BLEDevice> currentDevices = {};
-  static BLEDevice? displayedDevice;
-
-  static void _addConnectedDevice(BLEDevice device) {
-    currentDevices.add(device);
-    _streamController.add(currentDevices.toSet());
-  }
-
-  static void _removeConnectedDevice(BLEDevice device) {
-    currentDevices.remove(device);
-    _streamController.add(currentDevices.toSet());
-  }
-
-  static Stream<Set<BLEDevice>> get currentDevicesStream {
-    return _streamController.stream;
-  }
-
-  static Future<void> disconnectAll() async {
-    await Future.wait(
-        [for (BLEDevice device in currentDevices) device.disconnect()]);
-  }
-
-  final DiscoveredDevice _device;
-  final QualifiedCharacteristic _pressureCharacteristic,
-      _batteryPercentCharacteristic,
-      _isChargingCharacteristic,
-      _isChargerErrorCharacteristic;
-
-  bool isConnected = false;
-  StreamSubscription<ConnectionStateUpdate>? _connectionStateStreamSub;
-
   BLEDevice(this._device)
       : _pressureCharacteristic = QualifiedCharacteristic(
           deviceId: _device.id,
@@ -72,6 +25,55 @@ class BLEDevice {
           serviceId: _devParamServiceId,
           characteristicId: _batteryChargerErrorCharId,
         );
+  static final FlutterReactiveBle _bleInst = FlutterReactiveBle();
+
+  static final Uuid _devParamServiceId =
+      Uuid.parse('54f14985-0229-4e49-b054-18337e1f05d8');
+  static final Uuid _pressureCharId =
+      Uuid.parse('40650939-41cc-436c-959e-7f628d9720ee');
+  static final Uuid _batteryPercentCharId =
+      Uuid.parse('790cbc53-3aa9-471b-bbf2-e67cefaf5c6a');
+  static final Uuid _batteryChargingCharId =
+      Uuid.parse('a454b40e-00a2-45c1-a7fd-fd1f1ffd7dca');
+  static final Uuid _batteryChargerErrorCharId =
+      Uuid.parse('f31736e6-cb55-4aad-a89e-a1cd1b09ab33');
+
+  static final StreamController<Set<BLEDevice>> _streamController =
+      StreamController.broadcast();
+
+  static final Set<BLEDevice> currentDevices = <BLEDevice>{};
+  static BLEDevice? displayedDevice;
+
+  static void _addConnectedDevice(BLEDevice device) {
+    currentDevices.add(device);
+    _streamController.add(currentDevices.toSet());
+  }
+
+  static void _removeConnectedDevice(BLEDevice device) {
+    currentDevices.remove(device);
+    _streamController.add(currentDevices.toSet());
+  }
+
+  static Stream<Set<BLEDevice>> get currentDevicesStream {
+    return _streamController.stream;
+  }
+
+  static Future<void> disconnectAll() async {
+    await Future.wait(
+      <Future<void>>[
+        for (BLEDevice device in currentDevices) device.disconnect()
+      ],
+    );
+  }
+
+  final DiscoveredDevice _device;
+  final QualifiedCharacteristic _pressureCharacteristic,
+      _batteryPercentCharacteristic,
+      _isChargingCharacteristic,
+      _isChargerErrorCharacteristic;
+
+  bool isConnected = false;
+  StreamSubscription<ConnectionStateUpdate>? _connectionStateStreamSub;
 
   String get id => _device.id;
   int get rssi => _device.rssi;
@@ -79,14 +81,16 @@ class BLEDevice {
 
   Future<void> connect() async {
     //See https://pub.dev/packages/flutter_reactive_ble#establishing-connection for why [connectToAdvertisingDevice] was used
-    final connectionStream = _bleInst.connectToAdvertisingDevice(
+    final Stream<ConnectionStateUpdate> connectionStream =
+        _bleInst.connectToAdvertisingDevice(
       id: _device.id,
-      withServices: const [],
+      withServices: const <Uuid>[],
       prescanDuration: const Duration(seconds: 20),
     );
 
     final Completer<void> isConnectedComplete = Completer();
-    _connectionStateStreamSub = connectionStream.listen((event) {
+    _connectionStateStreamSub =
+        connectionStream.listen((ConnectionStateUpdate event) {
       if (event.connectionState == DeviceConnectionState.connected) {
         isConnected = true;
 
@@ -103,7 +107,7 @@ class BLEDevice {
   }
 
   Future<void> disconnect() async {
-    _connectionStateStreamSub?.cancel();
+    await _connectionStateStreamSub?.cancel();
     _removeConnectedDevice(this);
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smart_pacifier/services/device.dart';
-import 'package:smart_pacifier/services/ble_helper.dart';
 
 class Bluetooth extends StatefulWidget {
   const Bluetooth({super.key});
@@ -10,7 +9,7 @@ class Bluetooth extends StatefulWidget {
 }
 
 class _BluetoothState extends State<Bluetooth> {
-  List<ConnectionButton> scannedDevices = [];
+  List<ConnectionButton> scannedDevices = <ConnectionButton>[];
 
   @override
   void initState() {
@@ -39,19 +38,21 @@ class _BluetoothState extends State<Bluetooth> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-                fixedSize: const Size(350, 50),
-                textStyle:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.deepPurple,
-                shape: const StadiumBorder()),
+              fixedSize: const Size(350, 50),
+              textStyle:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.deepPurple,
+              shape: const StadiumBorder(),
+            ),
             child: const Text("Scan for Devices"),
             onPressed: () {
               setState(
                 () {
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) => _buildPopup(context));
+                    context: context,
+                    builder: (BuildContext context) => _buildPopup(context),
+                  );
                 },
               );
             },
@@ -64,7 +65,7 @@ class _BluetoothState extends State<Bluetooth> {
 }
 
 class NewDeviceButton extends StatefulWidget {
-  const NewDeviceButton({Key? key}) : super(key: key);
+  const NewDeviceButton({super.key});
 
   @override
   State<NewDeviceButton> createState() => _NewDeviceButtonState();
@@ -89,11 +90,12 @@ class _NewDeviceButtonState extends State<NewDeviceButton> {
         color: Colors.deepPurple,
       ),
       style: OutlinedButton.styleFrom(
-          fixedSize: const Size(350, 50),
-          textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          side: const BorderSide(width: 3, color: Colors.deepPurple),
-          backgroundColor: Colors.white,
-          shape: const StadiumBorder()),
+        fixedSize: const Size(350, 50),
+        textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        side: const BorderSide(width: 3, color: Colors.deepPurple),
+        backgroundColor: Colors.white,
+        shape: const StadiumBorder(),
+      ),
       onPressed: () {
         showDialog(
           context: context,
@@ -103,7 +105,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   const Text(
                     'Welcome!',
                     style: TextStyle(
@@ -112,8 +114,9 @@ class _NewDeviceButtonState extends State<NewDeviceButton> {
                     ),
                   ),
                   SizedBox(
-                      height: 150,
-                      child: Image.asset('assets/images/pacifier1.png')),
+                    height: 150,
+                    child: Image.asset('assets/images/pacifier1.png'),
+                  ),
                   const Text(
                     'What is your new device name?',
                     style: TextStyle(
@@ -131,7 +134,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       ElevatedButton(
                         child: const Text('Cancel'),
                         onPressed: () {
@@ -163,7 +166,7 @@ class _NewDeviceButtonState extends State<NewDeviceButton> {
 }
 
 class RemoveDeviceButton extends Bluetooth {
-  const RemoveDeviceButton({Key? key}) : super(key: key);
+  const RemoveDeviceButton({super.key});
 
   @override
   State<RemoveDeviceButton> createState() => _RemoveDeviceButtonState();
@@ -188,11 +191,12 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
         color: Colors.deepPurple,
       ),
       style: OutlinedButton.styleFrom(
-          fixedSize: const Size(350, 50),
-          textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          side: const BorderSide(width: 3, color: Colors.deepPurple),
-          backgroundColor: Colors.white,
-          shape: const StadiumBorder()),
+        fixedSize: const Size(350, 50),
+        textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        side: const BorderSide(width: 3, color: Colors.deepPurple),
+        backgroundColor: Colors.white,
+        shape: const StadiumBorder(),
+      ),
       onPressed: () {
         showDialog(
           context: context,
@@ -202,7 +206,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   const Text(
                     'Welcome!',
                     style: TextStyle(
@@ -211,8 +215,9 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
                     ),
                   ),
                   SizedBox(
-                      height: 150,
-                      child: Image.asset('assets/images/pacifier1.png')),
+                    height: 150,
+                    child: Image.asset('assets/images/pacifier1.png'),
+                  ),
                   const Text(
                     'What is your new device name?',
                     style: TextStyle(
@@ -230,7 +235,7 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       ElevatedButton(
                         child: const Text('Cancel'),
                         onPressed: () {
@@ -262,9 +267,8 @@ class _RemoveDeviceButtonState extends State<RemoveDeviceButton> {
 }
 
 class ConnectionButton extends StatefulWidget {
+  const ConnectionButton({required this.device, super.key});
   final BLEDevice device;
-
-  const ConnectionButton({required this.device, Key? key}) : super(key: key);
 
   @override
   State<ConnectionButton> createState() => _ConnectionButtonState();
@@ -278,11 +282,12 @@ class _ConnectionButtonState extends State<ConnectionButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          fixedSize: const Size(350, 50),
-          textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.deepPurple,
-          shape: const StadiumBorder()),
+        fixedSize: const Size(350, 50),
+        textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.deepPurple,
+        shape: const StadiumBorder(),
+      ),
       child: connected ? const Text("Connected") : const Text("Connect Device"),
       onPressed: () {
         setState(() {
@@ -300,34 +305,37 @@ Dialog _buildPopup(BuildContext context) {
   return Dialog(
     elevation: 16,
     child: ListView(
-        padding: const EdgeInsets.all(15),
-        shrinkWrap: true,
-        children: [
-          const SizedBox(
-            height: 50,
-            child: Text('Available Devices'),
-          ),
-          _popupItem(context),
-          const SizedBox(height: 20)
-        ]),
+      padding: const EdgeInsets.all(15),
+      shrinkWrap: true,
+      children: <Widget>[
+        const SizedBox(
+          height: 50,
+          child: Text('Available Devices'),
+        ),
+        _popupItem(context),
+        const SizedBox(height: 20),
+      ],
+    ),
   );
 }
 
 Widget _popupItem(BuildContext context) {
-  List<SizedBox> popupDisplay = [];
-  List<BLEDevice> devices = [];
+  final List<SizedBox> popupDisplay = <SizedBox>[];
+  final List<BLEDevice> devices = <BLEDevice>[];
 
   for (int i = 0; i < devices.length; i++) {
-    popupDisplay.add(SizedBox(
-      height: 50,
-      child: TextButton(
-        child: Text(devices[i].name),
-        onPressed: () async {
-          Navigator.of(context).pop();
-          devices[i].connect();
-        },
+    popupDisplay.add(
+      SizedBox(
+        height: 50,
+        child: TextButton(
+          child: Text(devices[i].name),
+          onPressed: () async {
+            Navigator.of(context).pop();
+            await devices[i].connect();
+          },
+        ),
       ),
-    ));
+    );
   }
   return Column(children: popupDisplay);
 }
