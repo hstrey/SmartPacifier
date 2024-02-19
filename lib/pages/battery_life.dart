@@ -19,33 +19,33 @@ class _BatteryLifeState extends State<BatteryLife> {
     Colors.green,
   ];
 
-  late Future<int> batteryPercentFuture;
+  late Future<int>? batteryPercentFuture;
 
   @override
   void initState() {
     super.initState();
     batteryPercentFuture =
-        widget.device?.getBatteryPercentage() ?? Future<int>.value(-1);
+        widget.device?.getBatteryPercentage();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<int>(
-      future: batteryPercentFuture,
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        if (snapshot.hasData) {
-          final int batteryValue = snapshot.data!;
-          if (batteryValue == -1) {
-            return const Scaffold(
-              body: Center(
-                child: Text(
-                  'No device connected.',
-                  textScaleFactor: 2,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          } else {
+    if(batteryPercentFuture == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text(
+            'No device connected.',
+            textScaleFactor: 2,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    } else{
+      return FutureBuilder<int>(
+        future: batteryPercentFuture,
+        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          if (snapshot.hasData) {
+            final int batteryValue = snapshot.data!;
             return Scaffold(
               body: Padding(
                 padding: const EdgeInsets.only(top: 75),
@@ -74,12 +74,12 @@ class _BatteryLifeState extends State<BatteryLife> {
                 ),
               ),
             );
+          } else {
+            return const CircularProgressIndicator();
           }
-        } else {
-          return const CircularProgressIndicator();
-        }
-      },
-    );
+        },
+      );
+    }
   }
 }
 

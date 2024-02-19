@@ -82,15 +82,16 @@ class BLEDevice {
   Future<void> connect() async {
     //See https://pub.dev/packages/flutter_reactive_ble#establishing-connection for why [connectToAdvertisingDevice] was used
     final Stream<ConnectionStateUpdate> connectionStream =
-        _bleInst.connectToAdvertisingDevice(
+        _bleInst.connectToDevice(
       id: _device.id,
-      withServices: const <Uuid>[],
-      prescanDuration: const Duration(seconds: 20),
+      // withServices: const <Uuid>[],
+      // prescanDuration: const Duration(seconds: 20),
     );
 
     final Completer<void> isConnectedComplete = Completer<void>();
     _connectionStateStreamSub =
         connectionStream.listen((ConnectionStateUpdate event) {
+          print(event);
       if (event.connectionState == DeviceConnectionState.connected) {
         isConnected = true;
 
@@ -100,7 +101,7 @@ class BLEDevice {
       } else if (event.connectionState == DeviceConnectionState.disconnected) {
         isConnected = false;
       }
-    });
+    },);
 
     await isConnectedComplete.future;
     _addConnectedDevice(this);

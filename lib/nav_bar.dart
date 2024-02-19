@@ -14,12 +14,6 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _currentIndex = 1;
 
-  final List<Widget> _children = <Widget>[
-    const Bluetooth(),
-    const Metrics(),
-    BatteryLife(device: BLEDevice.displayedDevice),
-  ];
-
   final List<String> _titles = <String>[
     'Bluetooth',
     'Metrics',
@@ -28,11 +22,17 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> children = <Widget>[
+      const Bluetooth(),
+      Metrics(device: BLEDevice.displayedDevice),
+      BatteryLife(device: BLEDevice.displayedDevice),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_currentIndex]),
       ),
-      body: _children[_currentIndex],
+      body: children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: _currentIndex,
