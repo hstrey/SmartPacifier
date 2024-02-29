@@ -91,7 +91,7 @@ class BLEDevice {
     final Completer<void> isConnectedComplete = Completer<void>();
     _connectionStateStreamSub =
         connectionStream.listen((ConnectionStateUpdate event) {
-          print(event);
+
       if (event.connectionState == DeviceConnectionState.connected) {
         isConnected = true;
 
@@ -105,6 +105,7 @@ class BLEDevice {
 
     await isConnectedComplete.future;
     _addConnectedDevice(this);
+    await _bleInst.requestMtu(deviceId: _device.id, mtu: 150);
   }
 
   Future<void> disconnect() async {
