@@ -7,6 +7,19 @@ import 'package:smart_pacifier/services/device.dart';
 class Metrics extends StatefulWidget {
   const Metrics({required this.device, super.key});
   final BLEDevice? device;
+  static List<ChartData> pressureValues = <ChartData>[];
+  static int counter = 0;
+  static double maxPressure = -1000;
+  static List<double> samplingData = <double>[];
+  static double roomPressure = 0;
+
+  static void reset(){
+    pressureValues = <ChartData>[];
+    counter = 0;
+    maxPressure = -1000;
+    samplingData = <double>[];
+    roomPressure = 0;
+  }
 
   @override
   State<Metrics> createState() => _MetricsState();
@@ -14,11 +27,6 @@ class Metrics extends StatefulWidget {
 
 class _MetricsState extends State<Metrics> {
   late Stream<double>? metricsStream;
-
-  static List<ChartData> pressureValues = <ChartData>[];
-  static int counter = 0;
-  static double maxPressure = -1000;
-  static double roomPressure = 0;
   late StreamSubscription<double>? metricsSubscription;
   
   @override
@@ -26,23 +34,36 @@ class _MetricsState extends State<Metrics> {
     super.initState();
     metricsStream = widget.device?.pressureStream();
     metricsSubscription = metricsStream?.listen((double data) {
-      counter++;
-      if (counter <= 20){
-        roomPressure += data;
+      Metrics.counter++;
+      if (Metrics.counter <= 20){
+        Metrics.samplingData += <double>[data];
       }
       else{
-        pressureValues.add(ChartData(counter, roomPressure/20-data));
+        Metrics.pressureValues.add(ChartData(Metrics.counter, Metrics.roomPressure-data));
       }
-      if (counter % 20 == 0){
+      if (Metrics.counter  == 20){
+        int maxCount = 0;
+        for(double value in Metrics.samplingData){
+          int modeCount = 0;
+          for(double value2 in Metrics.samplingData){
+            if(value == value2) modeCount++;
+          }
+          if(modeCount > maxCount){
+            maxCount = modeCount;
+            Metrics.roomPressure = value;
+          }
+        }
+      }
+      if (Metrics.counter % 20 == 0){
         update();
       }
-      if (pressureValues.length > 1200){
-        pressureValues.removeAt(0);
+      if (Metrics.pressureValues.length > 1200){
+        Metrics.pressureValues.removeAt(0);
       }
-      maxPressure = -1000;
-      for(ChartData data in pressureValues){
-        if(data.y>maxPressure) {
-          maxPressure = data.y;
+      Metrics.maxPressure = -1000;
+      for(ChartData data in Metrics.pressureValues){
+        if(data.y>Metrics.maxPressure) {
+          Metrics.maxPressure = data.y;
         }
       }
     });
@@ -70,7 +91,7 @@ class _MetricsState extends State<Metrics> {
           ),
         ),
       );
-    } else if (counter <= 20) {
+    } else if (Metrics.counter <= 20) {
       return const CircularProgressIndicator();
     } else{
       return Scaffold(
@@ -124,7 +145,7 @@ class _MetricsState extends State<Metrics> {
                                   title: ChartTitle(text: 'Pressure'),
                                   series: <LineSeries<ChartData, int>> [
                                     LineSeries<ChartData, int>(
-                                      dataSource: pressureValues,
+                                      dataSource: Metrics.pressureValues,
                                       xValueMapper: (ChartData data, _) => data.x,
                                       yValueMapper: (ChartData data, _) => data.y,
                                       animationDuration: 0,
@@ -151,14 +172,14 @@ class _MetricsState extends State<Metrics> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             const Text(
-                              'Minimum Pressure',
+                              'Maximum Pressure',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 28,
                               ),
                             ),
                             Text(
-                              maxPressure.toStringAsFixed(2),
+                              '${Metrics.maxPressure.toStringAsFixed(2)} mmHg',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 28,

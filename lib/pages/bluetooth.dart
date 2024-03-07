@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:smart_pacifier/services/ble_helper.dart';
 import 'package:smart_pacifier/services/device.dart';
+import 'package:smart_pacifier/pages/metrics.dart';
 
 class Bluetooth extends StatefulWidget {
   const Bluetooth({super.key});
@@ -107,6 +108,9 @@ class _ConnectionButtonState extends State<ConnectionButton> {
           connected
               ? BLEDevice.displayedDevice = widget.device
               : BLEDevice.displayedDevice = null;
+          if (connected){
+            Metrics.reset();
+          }
         });
       },
     );
