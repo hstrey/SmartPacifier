@@ -39,14 +39,18 @@ class _MetricsState extends State<Metrics> {
         Metrics.samplingData += <double>[data];
       }
       else{
-        Metrics.pressureValues.add(ChartData(Metrics.counter, Metrics.roomPressure-data));
+        final DateTime now = DateTime.now();
+
+        Metrics.pressureValues.add(ChartData(now.hour*360 + now.minute*60 + now.second, Metrics.roomPressure-data));
       }
       if (Metrics.counter  == 20){
         int maxCount = 0;
         for(double value in Metrics.samplingData){
           int modeCount = 0;
           for(double value2 in Metrics.samplingData){
-            if(value == value2) modeCount++;
+            if(value == value2) {
+              modeCount++;
+            }
           }
           if(modeCount > maxCount){
             maxCount = modeCount;
