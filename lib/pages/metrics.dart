@@ -169,7 +169,7 @@ class _MetricsState extends State<Metrics> {
                       height: MediaQuery.of(context).size.width * 1 / 3,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Colors.deepPurple,
+                          color: Color(0xFF673AB7),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(

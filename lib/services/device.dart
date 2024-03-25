@@ -136,23 +136,18 @@ class BLEDevice {
         });
   }
 
-  Future<int> getBatteryPercentage() async {
-    final List<int> data =
+  Future<List<int>> getBatteryInfo() async {
+    final List<int> percent =
         await _bleInst.readCharacteristic(_batteryPercentCharacteristic);
 
-    assert(data.length == 1);
-
-    return data.first;
-  }
-
-  /// Returns true if the battery is charging
-  Future<bool> getChargingStatus() async {
-    final List<int> data =
+    final List<int> charging =
         await _bleInst.readCharacteristic(_isChargingCharacteristic);
 
-    assert(data.length == 1);
+    assert(percent.length == 1);
 
-    return data.first.toBool();
+    assert(charging.length == 1);
+
+    return <int>[percent.first, charging.first];
   }
 
   /// Returns true if there is an error with charging

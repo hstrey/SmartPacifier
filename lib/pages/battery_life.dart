@@ -19,18 +19,18 @@ class _BatteryLifeState extends State<BatteryLife> {
     Colors.green,
   ];
 
-  late Future<int>? batteryPercentFuture;
+  late Future<List<int>>? batteryFuture;
 
   @override
   void initState() {
     super.initState();
-    batteryPercentFuture =
-        widget.device?.getBatteryPercentage();
+    batteryFuture =
+        widget.device?.getBatteryInfo();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(batteryPercentFuture == null) {
+    if(batteryFuture == null) {
       return const Scaffold(
         body: Center(
           child: Text(
@@ -41,11 +41,12 @@ class _BatteryLifeState extends State<BatteryLife> {
         ),
       );
     } else{
-      return FutureBuilder<int>(
-        future: batteryPercentFuture,
-        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+      return FutureBuilder<List<int>>(
+        future: batteryFuture,
+        builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
           if (snapshot.hasData) {
-            final int batteryValue = snapshot.data!;
+            final int batteryValue = snapshot.data![0];
+            final int isCharging = snapshot.data![1];
             return Scaffold(
               body: Padding(
                 padding: const EdgeInsets.only(top: 75),
@@ -59,25 +60,68 @@ class _BatteryLifeState extends State<BatteryLife> {
                         '$batteryValue%',
                         style: const TextStyle(fontSize: 100),
                       ),
-                      Transform.rotate(
-                        angle: 90 * math.pi / 180,
-                        child: BatteryIcon(
-                          batteryLevel: batteryValue,
-                          height: MediaQuery.of(context).size.height / 5,
-                          width: MediaQuery.of(context).size.width / 2,
-                          segmentColor: batteryColors[
-                              (batteryValue / 25 + 0.99).truncate()],
-                        ),
+                      BatteryRow(
+                        batteryLevel: batteryValue,
+                        height: MediaQuery.of(context).size.height / 5,
+                        width: MediaQuery.of(context).size.width / 2,
+                        segmentColor: batteryColors[
+                            (batteryValue / 25 + 0.99).truncate()],
+                        charging: isCharging == 0,
                       ),
                     ],
                   ),
+                  ),
                 ),
-              ),
-            );
+              );
           } else {
             return const CircularProgressIndicator();
           }
         },
+      );
+    }
+  }
+}
+
+class BatteryRow extends StatelessWidget {
+  const BatteryRow({
+    required this.batteryLevel,
+    required this.height,
+    required this.width,
+    required this.segmentColor,
+    required this.charging,
+    super.key,
+  });
+  final int batteryLevel;
+  final double height;
+  final double width;
+  final Color segmentColor;
+  final bool charging;
+
+  @override
+  Widget build(BuildContext context) {
+    if (charging){
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const SizedBox(width:40),
+          BatteryIcon(
+            batteryLevel: batteryLevel, 
+            height: height, 
+            width: width, 
+            segmentColor: segmentColor, 
+            charging: charging,
+          ),
+          const SizedBox(width:40),
+          const Icon(Icons.bolt, size: 100),
+        ],
+      );
+    } else {
+      return BatteryIcon(
+        batteryLevel: batteryLevel, 
+        height: height, 
+        width: width, 
+        segmentColor: segmentColor, 
+        charging: charging,
       );
     }
   }
@@ -89,57 +133,62 @@ class BatteryIcon extends StatelessWidget {
     required this.height,
     required this.width,
     required this.segmentColor,
+    required this.charging,
     super.key,
   });
   final int batteryLevel;
   final double height;
   final double width;
   final Color segmentColor;
+  final bool charging;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          width: height * 0.5,
-          height: width * 0.075,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(5),
-              topLeft: Radius.circular(5),
+    return Transform.rotate(
+      angle: 90 * math.pi / 180,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: height * 0.5,
+            height: width * 0.075,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(5),
+                topLeft: Radius.circular(5),
+              ),
+              border: Border.all(color: Colors.black, width: 1),
             ),
-            border: Border.all(color: Colors.black, width: 1),
           ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-            border: Border.all(color: Colors.black),
-          ),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: height,
-                height: width * (1 - batteryLevel * 0.01),
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              border: Border.all(color: Colors.black),
+            ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: height,
+                  height: width * (1 - batteryLevel * 0.01),
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                  ),
                 ),
-              ),
-              Container(
-                width: height,
-                height: width * (batteryLevel * 0.01),
-                decoration: BoxDecoration(
-                  color: segmentColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(3)),
+                Container(
+                  width: height,
+                  height: width * (batteryLevel * 0.01),
+                  decoration: BoxDecoration(
+                    color: segmentColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(3)),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
