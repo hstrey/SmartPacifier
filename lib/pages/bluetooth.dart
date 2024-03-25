@@ -66,7 +66,28 @@ class _BluetoothState extends State<Bluetooth> {
                 () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) => _buildPopup(context, scannedDevices),
+                    builder: (BuildContext context) => _buildPopup(context, scannedDevices, true),
+                  );
+                },
+              );
+            },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              fixedSize: const Size(350, 50),
+              textStyle:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.deepPurple,
+              shape: const StadiumBorder(),
+            ),
+            child: const Text("Remove Device"),
+            onPressed: () {
+              setState(
+                () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _buildPopup(context, BLEDevice.currentDevices, false),
                   );
                 },
               );
@@ -88,7 +109,6 @@ class ConnectionButton extends StatefulWidget {
 }
 
 class _ConnectionButtonState extends State<ConnectionButton> {
-  String buttonName = 'Connect Device';
   bool connected = !(BLEDevice.displayedDevice == null);
 
   @override
@@ -101,7 +121,7 @@ class _ConnectionButtonState extends State<ConnectionButton> {
         backgroundColor: Colors.deepPurple,
         shape: const StadiumBorder(),
       ),
-      child: connected ? const Text("Connected") : const Text("Connect Device"),
+      child: connected ? Text("${widget.device.name}: Connected") : Text("${widget.device.name}: Disconnected"),
       onPressed: () {
         setState(() {
           connected = !connected;
@@ -117,25 +137,25 @@ class _ConnectionButtonState extends State<ConnectionButton> {
   }
 }
 
-Dialog _buildPopup(BuildContext context, Set<BLEDevice> devices) {
+Dialog _buildPopup(BuildContext context, Set<BLEDevice> devices, bool connect) {
   return Dialog(
     elevation: 16,
     child: ListView(
       padding: const EdgeInsets.all(15),
       shrinkWrap: true,
       children: <Widget>[
-        const SizedBox(
+        SizedBox(
           height: 50,
-          child: Text('Available Devices'),
+          child: connect ? const Text("Available Devices") : const Text("Current Devices"),
         ),
-        _popupItem(context, devices),
+        connect ? _addItem(context, devices) : _removeItem(context, devices),
         const SizedBox(height: 20),
       ],
     ),
   );
 }
 
-Widget _popupItem(BuildContext context, Set<BLEDevice> devices) {
+Widget _addItem(BuildContext context, Set<BLEDevice> devices) {
   final List<SizedBox> popupDisplay = <SizedBox>[];
 
   for (int i = 0; i < devices.length; i++) {
@@ -147,6 +167,27 @@ Widget _popupItem(BuildContext context, Set<BLEDevice> devices) {
           onPressed: () async {
             Navigator.of(context).pop();
             await devices.elementAt(i).connect();
+            
+          },
+        ),
+      ),
+    );
+  }
+  return Column(children: popupDisplay);
+}
+
+Widget _removeItem(BuildContext context, Set<BLEDevice> devices) {
+  final List<SizedBox> popupDisplay = <SizedBox>[];
+
+  for (int i = 0; i < devices.length; i++) {
+    popupDisplay.add(
+      SizedBox(
+        height: 50,
+        child: TextButton(
+          child: Text(devices.elementAt(i).name),
+          onPressed: () async {
+            Navigator.of(context).pop();
+            await devices.elementAt(i).disconnect();
             
           },
         ),

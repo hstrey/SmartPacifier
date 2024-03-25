@@ -99,7 +99,7 @@ class BatteryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (charging){
+    if (!charging){
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

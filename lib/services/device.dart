@@ -110,6 +110,9 @@ class BLEDevice {
 
   Future<void> disconnect() async {
     await _connectionStateStreamSub?.cancel();
+    if(this == BLEDevice.displayedDevice){
+      BLEDevice.displayedDevice = null;
+    }
     _removeConnectedDevice(this);
   }
 
