@@ -157,7 +157,6 @@ Dialog _buildPopup(BuildContext context, Set<BLEDevice> devices, bool connect) {
 
 Widget _addItem(BuildContext context, Set<BLEDevice> devices) {
   final List<SizedBox> popupDisplay = <SizedBox>[];
-
   for (int i = 0; i < devices.length; i++) {
     popupDisplay.add(
       SizedBox(
@@ -180,19 +179,21 @@ Widget _removeItem(BuildContext context, Set<BLEDevice> devices) {
   final List<SizedBox> popupDisplay = <SizedBox>[];
 
   for (int i = 0; i < devices.length; i++) {
-    popupDisplay.add(
-      SizedBox(
-        height: 50,
-        child: TextButton(
-          child: Text(devices.elementAt(i).name),
-          onPressed: () async {
-            Navigator.of(context).pop();
-            await devices.elementAt(i).disconnect();
-            
-          },
+    if(BLEDevice.displayedDevice?.name != devices.elementAt(i).name){
+      popupDisplay.add(
+        SizedBox(
+          height: 50,
+          child: TextButton(
+            child: Text(devices.elementAt(i).name),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await devices.elementAt(i).disconnect();
+              
+            },
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
   return Column(children: popupDisplay);
 }
